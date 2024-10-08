@@ -10,9 +10,9 @@ module.exports = {
       [
         {
           product_name: "Nike Air Jordan",
-          product_image: "/images/nike.jpg",
           product_stock: 1,
           product_price: 1000000,
+          product_desc: "Lorem ipsum dolor sit amet",
           isActive: true,
           created_by: 1,
           updated_by: 1,
@@ -21,9 +21,9 @@ module.exports = {
         },
         {
           product_name: "Adidas Stan Smith",
-          product_image: "/images/nike.jpg",
           product_stock: 10,
-          product_price: 1000000,
+          product_price: 5000000,
+          product_desc: "Lorem ipsum dolor sit amet",
           isActive: true,
           created_by: 1,
           updated_by: 1,

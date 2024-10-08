@@ -14,10 +14,6 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
-      // product_image: {
-      //   type: Sequelize.STRING,
-      //   allowNull: false,
-      // },
       product_price: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -26,6 +22,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         defaultValue: 0,
+      },
+      product_desc: {
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       isActive: {
         type: Sequelize.BOOLEAN,

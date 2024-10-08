@@ -24,10 +24,6 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         unique: true,
       },
-      // product_image: {
-      //   type: DataTypes.STRING,
-      //   allowNull: false,
-      // },
       product_price: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -36,6 +32,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0,
+      },
+      product_desc: {
+        type: DataTypes.STRING,
+        allowNull: false,
       },
       isActive: {
         type: DataTypes.BOOLEAN,

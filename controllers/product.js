@@ -5,28 +5,43 @@ const {
   errorServerResponse,
   errorClientResponse,
 } = require("@/helpers/responseHelper");
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
 
 const getAllProducts = async (req, res) => {
   try {
-    const searchInput = req.query;
+    const { search } = req.query;
 
-    // if (searchInput) {
-    //   const products = await Product.findAll({
-    //     where: {
-    //       [Op.or]: {
-    //         product_name: searchInput,
-    //         product_price: searchInput,
-    //       },
-    //     },
-    //   });
-    //   successResponseData(res, "success get all products", products, 200);
-    // }
-    const products = await Product.findAll();
-    successResponseData(res, "success get all products", products, 200);
+    if (search) {
+      const products = await Product.findAll({
+        where: {
+          [Op.or]: {
+            product_name: { [Op.like]: `%${search}%` },
+            product_desc: { [Op.like]: `%${search}%` },
+          },
+          [Op.and]: { isActive: 1 },
+        },
+      });
+      successResponseData(res, "success get all products", products, 200);
+    } else {
+      const products = await Product.findAll({
+        where: { isActive: 1 },
+      });
+      successResponseData(res, "success get all products", products, 200);
+    }
   } catch (error) {
     console.log(error);
     errorServerResponse(res, "Failed get all products");
+  }
+};
+
+const getAllProductArchive = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: { isActive: 0 },
+    });
+    successResponseData(res, "Success get all product archive!", products, 200);
+  } catch (error) {
+    errorServerResponse(res, "Failed get product archive");
   }
 };
 
@@ -93,6 +108,10 @@ const archiveProduct = async (req, res) => {
   try {
     const { id } = req.params;
     const { isActive } = req.body;
+    const product = await getProductById(req, res);
+    if (!product) {
+      return;
+    }
     await Product.update(
       {
         isActive: isActive,
@@ -112,6 +131,10 @@ const archiveProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
+    const product = await getProductById(req, res);
+    if (!product) {
+      return;
+    }
     await Product.destroy({
       where: {
         product_id: id,
@@ -125,6 +148,7 @@ const deleteProduct = async (req, res) => {
 
 module.exports = {
   getAllProducts,
+  getAllProductArchive,
   getProductById,
   createProduct,
   updateProductById,
