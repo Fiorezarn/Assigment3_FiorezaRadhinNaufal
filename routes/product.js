@@ -4,10 +4,20 @@ const {
   getAllProducts,
   getProductById,
   createProduct,
+  updateProductById,
+  archiveProduct,
+  deleteProduct,
 } = require("@/controllers/product");
+const {
+  bodyValidation,
+  checkDuplicates,
+} = require("@/controllers/validations/product");
 
 router.get("/", getAllProducts);
 router.get("/:id", getProductById);
-router.post("/", createProduct);
+router.post("/", bodyValidation, checkDuplicates, createProduct);
+router.put("/:id", updateProductById);
+router.patch("/:id", archiveProduct);
+router.delete("/:id", deleteProduct);
 
 module.exports = router;

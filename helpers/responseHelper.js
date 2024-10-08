@@ -1,6 +1,6 @@
 // responseHelper.js
 
-const successResponseCreateData = (res, message, data, code = 201) => {
+const successResponseData = (res, message, data, code = 201) => {
   return res.status(code).send({
     status: "success",
     code,
@@ -9,12 +9,11 @@ const successResponseCreateData = (res, message, data, code = 201) => {
   });
 };
 
-const successResponseGetData = (res, message, data, code = 200) => {
+const successResponse = (res, message, code = 200) => {
   return res.status(code).send({
     status: "success",
     code,
     message,
-    data,
   });
 };
 
@@ -26,7 +25,7 @@ const errorServerResponse = (res, message, code = 500) => {
   });
 };
 
-const errorClientResponse = (res, message, code) => {
+const errorClientResponse = (res, message, code = 400) => {
   return res.status(code).send({
     status: "error",
     code,
@@ -35,8 +34,8 @@ const errorClientResponse = (res, message, code) => {
 };
 
 module.exports = {
-  successResponseCreateData,
-  successResponseGetData,
+  successResponseData,
+  successResponse,
   errorServerResponse,
   errorClientResponse,
 };

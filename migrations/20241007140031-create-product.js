@@ -14,10 +14,10 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
-      product_image: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
+      // product_image: {
+      //   type: Sequelize.STRING,
+      //   allowNull: false,
+      // },
       product_price: {
         type: Sequelize.INTEGER,
         allowNull: false,
