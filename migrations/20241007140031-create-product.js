@@ -29,16 +29,16 @@ module.exports = {
       },
       isActive: {
         type: Sequelize.BOOLEAN,
-        allowNull: false,
+        allowNull: true,
         defaultValue: true,
       },
       created_by: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       updated_by: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       createdAt: {
         allowNull: false,

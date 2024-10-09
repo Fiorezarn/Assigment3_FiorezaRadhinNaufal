@@ -39,16 +39,16 @@ module.exports = (sequelize, DataTypes) => {
       },
       isActive: {
         type: DataTypes.BOOLEAN,
-        allowNull: false,
+        allowNull: true,
         defaultValue: true,
       },
       created_by: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       updated_by: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
     },
     {

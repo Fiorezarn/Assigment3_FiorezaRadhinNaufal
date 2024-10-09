@@ -41,18 +41,28 @@ const getAllProductArchive = async (req, res) => {
     });
     successResponseData(res, "Success get all product archive!", products, 200);
   } catch (error) {
-    errorServerResponse(res, "Failed get product archive");
+    errorServerResponse(res, "Failed get all product archive");
+  }
+};
+
+const findProductById = async (id) => {
+  try {
+    const product = await Product.findOne({
+      where: { product_id: id },
+    });
+    return product;
+  } catch (error) {
+    throw new Error("Failed to get product");
   }
 };
 
 const getProductById = async (req, res) => {
   try {
     const id = req.params.id;
-    const products = await Product.findOne({
-      where: { product_id: id },
-    });
+    const products = await findProductById(id);
     if (!products) {
       errorClientResponse(res, `product with id ${id} not found!`, 404);
+      return;
     }
     successResponseData(res, `product with id ${id} found!`, products, 200);
   } catch (error) {
@@ -62,14 +72,21 @@ const getProductById = async (req, res) => {
 
 const createProduct = async (req, res) => {
   try {
-    const { name, price, stock, createdBy, updatedBy } = req.body;
+    const {
+      product_name,
+      product_price,
+      product_stock,
+      product_desc,
+      created_by,
+      updated_by,
+    } = req.body;
     const newProduct = await Product.create({
-      product_name: name,
-      product_price: price,
-      product_stock: stock,
-      created_by: createdBy,
-      updated_by: updatedBy,
-      isActive: 1,
+      product_name: product_name,
+      product_price: product_price,
+      product_stock: product_stock,
+      product_desc: product_desc,
+      created_by: created_by,
+      updated_by: updated_by,
     });
     successResponseData(res, "Successfully Create Product", newProduct);
   } catch (error) {
@@ -80,16 +97,25 @@ const createProduct = async (req, res) => {
 const updateProductById = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, image, price, stock, createdBy, updatedBy } = req.body;
+    const product = await findProductById(id);
+    if (!product) {
+      errorClientResponse(res, `product with id ${id} not found!`, 404);
+      return;
+    }
+    const {
+      product_name,
+      product_price,
+      product_stock,
+      product_desc,
+      updated_by,
+    } = req.body;
     await Product.update(
       {
-        product_name: name,
-        product_image: image,
-        product_price: price,
-        product_stock: stock,
-        created_by: createdBy,
-        updated_by: updatedBy,
-        isActive: 1,
+        product_name: product_name,
+        product_price: product_price,
+        product_stock: product_stock,
+        product_desc: product_desc,
+        updated_by: updated_by,
       },
       {
         where: {
@@ -108,8 +134,9 @@ const archiveProduct = async (req, res) => {
   try {
     const { id } = req.params;
     const { isActive } = req.body;
-    const product = await getProductById(req, res);
+    const product = await findProductById(id);
     if (!product) {
+      errorClientResponse(res, `product with id ${id} not found!`, 404);
       return;
     }
     await Product.update(
@@ -122,7 +149,11 @@ const archiveProduct = async (req, res) => {
         },
       }
     );
-    successResponse(res, `Product id ${id} is archived!`);
+    if (isActive === 0) {
+      successResponse(res, `Product id ${id} is archived!`);
+    } else {
+      successResponse(res, `Product id ${id} is unarchived!`);
+    }
   } catch (error) {
     errorServerResponse(res, "Failed archived product!");
   }
@@ -131,8 +162,9 @@ const archiveProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const product = await getProductById(req, res);
+    const product = await findProductById(id);
     if (!product) {
+      errorClientResponse(res, `product with id ${id} not found!`, 404);
       return;
     }
     await Product.destroy({
@@ -154,4 +186,5 @@ module.exports = {
   updateProductById,
   archiveProduct,
   deleteProduct,
+  findProductById,
 };
