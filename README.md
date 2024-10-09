@@ -6,11 +6,11 @@ This is the API of the product to fulfill phincon academy assignment 3
 ![alt text](https://github.com/Fiorezarn/Assigment3_FiorezaRadhinNaufal/blob/main/public/images/swaggerui.png)
 
 ## Features
-- **Get All Products**: Retrieve a list of all products with optional search functionality by product name or product description.
-- **Get Product by ID**: Retrieve details of a specific product using its unique identifier.
-- **Create Product**: Add a new product to the database.
-- **Archive and Unarchive Product**: Change the status of a product to archived or unarchived.
-- **Delete Product**: Permanently remove a product from the database.
+1 **Get All Products**: Retrieve a list of all products with optional search functionality by product name or product description.
+2 **Get Product by ID**: Retrieve details of a specific product using its unique identifier.
+3 **Create Product**: Add a new product to the database.
+4 **Archive and Unarchive Product**: Change the status of a product to archived or unarchived.
+5 **Delete Product**: Permanently remove a product from the database.
 
 ## Tech Stack
 
