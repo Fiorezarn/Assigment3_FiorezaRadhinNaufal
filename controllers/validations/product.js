@@ -17,7 +17,7 @@ const bodyValidation = (req, res, next) => {
   });
   const validationError = schema.validate(req.body).error;
   if (validationError) {
-    errorClientResponse(res, validationError.details);
+    return errorClientResponse(res, validationError.details);
   }
   next();
 };
@@ -29,11 +29,14 @@ const checkDuplicates = async (req, res, next) => {
       where: { product_name: product_name },
     });
     if (data) {
-      errorClientResponse(res, `Product with ${product_name} already exists`);
+      return errorClientResponse(
+        res,
+        `Product with ${product_name} already exists`
+      );
     }
     next();
   } catch (error) {
-    errorServerResponse(res, "Internal server error");
+    return errorServerResponse(res, "Internal server error");
   }
 };
 module.exports = { bodyValidation, checkDuplicates };

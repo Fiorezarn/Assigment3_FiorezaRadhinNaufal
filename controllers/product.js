@@ -5,7 +5,7 @@ const {
   errorServerResponse,
   errorClientResponse,
 } = require("@/helpers/responseHelper");
-const { Op, where } = require("sequelize");
+const { Op } = require("sequelize");
 
 const getAllProducts = async (req, res) => {
   try {
@@ -21,16 +21,25 @@ const getAllProducts = async (req, res) => {
           [Op.and]: { isActive: 1 },
         },
       });
-      successResponseData(res, "success get all products", products, 200);
+      return successResponseData(
+        res,
+        "success get all products",
+        products,
+        200
+      );
     } else {
       const products = await Product.findAll({
         where: { isActive: 1 },
       });
-      successResponseData(res, "success get all products", products, 200);
+      return successResponseData(
+        res,
+        "success get all products",
+        products,
+        200
+      );
     }
   } catch (error) {
-    console.log(error);
-    errorServerResponse(res, "Failed get all products");
+    return errorServerResponse(res, "Failed get all products");
   }
 };
 
@@ -39,9 +48,14 @@ const getAllProductArchive = async (req, res) => {
     const products = await Product.findAll({
       where: { isActive: 0 },
     });
-    successResponseData(res, "Success get all product archive!", products, 200);
+    return successResponseData(
+      res,
+      "Success get all product archive!",
+      products,
+      200
+    );
   } catch (error) {
-    errorServerResponse(res, "Failed get all product archive");
+    return errorServerResponse(res, "Failed get all product archive");
   }
 };
 
@@ -52,7 +66,7 @@ const findProductById = async (id) => {
     });
     return product;
   } catch (error) {
-    throw new Error("Failed to get product");
+    return errorServerResponse(res, "Failed get product");
   }
 };
 
@@ -61,12 +75,16 @@ const getProductById = async (req, res) => {
     const id = req.params.id;
     const products = await findProductById(id);
     if (!products) {
-      errorClientResponse(res, `product with id ${id} not found!`, 404);
-      return;
+      return errorClientResponse(res, `product with id ${id} not found!`, 404);
     }
-    successResponseData(res, `product with id ${id} found!`, products, 200);
+    return successResponseData(
+      res,
+      `product with id ${id} found!`,
+      products,
+      200
+    );
   } catch (error) {
-    errorServerResponse(res, "Failed get product");
+    return errorServerResponse(res, "Failed get product");
   }
 };
 
@@ -88,9 +106,9 @@ const createProduct = async (req, res) => {
       created_by: created_by,
       updated_by: updated_by,
     });
-    successResponseData(res, "Successfully Create Product", newProduct);
+    return successResponseData(res, "Successfully Create Product", newProduct);
   } catch (error) {
-    errorServerResponse(res, "Failed Create Product!");
+    return errorServerResponse(res, "Failed Create Product!");
   }
 };
 
@@ -99,8 +117,7 @@ const updateProductById = async (req, res) => {
     const { id } = req.params;
     const product = await findProductById(id);
     if (!product) {
-      errorClientResponse(res, `product with id ${id} not found!`, 404);
-      return;
+      return errorClientResponse(res, `product with id ${id} not found!`, 404);
     }
     const {
       product_name,
@@ -123,10 +140,9 @@ const updateProductById = async (req, res) => {
         },
       }
     );
-
-    successResponse(res, `Successfully update product with id ${id}`);
+    return successResponse(res, `Successfully update product with id ${id}`);
   } catch (error) {
-    errorServerResponse(res, "Failed update product");
+    return errorServerResponse(res, "Failed update product");
   }
 };
 
@@ -136,8 +152,7 @@ const archiveProduct = async (req, res) => {
     const { isActive } = req.body;
     const product = await findProductById(id);
     if (!product) {
-      errorClientResponse(res, `product with id ${id} not found!`, 404);
-      return;
+      return errorClientResponse(res, `product with id ${id} not found!`, 404);
     }
     await Product.update(
       {
@@ -150,12 +165,12 @@ const archiveProduct = async (req, res) => {
       }
     );
     if (isActive === 0) {
-      successResponse(res, `Product id ${id} is archived!`);
+      return successResponse(res, `Product id ${id} is archived!`);
     } else {
-      successResponse(res, `Product id ${id} is unarchived!`);
+      return successResponse(res, `Product id ${id} is unarchived!`);
     }
   } catch (error) {
-    errorServerResponse(res, "Failed archived product!");
+    return errorServerResponse(res, "Failed archived product!");
   }
 };
 
@@ -164,17 +179,16 @@ const deleteProduct = async (req, res) => {
     const { id } = req.params;
     const product = await findProductById(id);
     if (!product) {
-      errorClientResponse(res, `product with id ${id} not found!`, 404);
-      return;
+      return errorClientResponse(res, `product with id ${id} not found!`, 404);
     }
     await Product.destroy({
       where: {
         product_id: id,
       },
     });
-    successResponse(res, `Succesfully delete product id ${id}`);
+    return successResponse(res, `Succesfully delete product id ${id}`);
   } catch (error) {
-    errorServerResponse(res, "Failed delete product");
+    return errorServerResponse(res, "Failed delete product");
   }
 };
 
