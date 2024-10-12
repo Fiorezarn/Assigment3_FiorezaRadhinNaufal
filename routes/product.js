@@ -58,7 +58,7 @@
  *         in: query
  *         description: Search product by name
  *         type: string
- *         example: banana
+ *         example: Nike
  *     responses:
  *       200:
  *         description: The list of the products
