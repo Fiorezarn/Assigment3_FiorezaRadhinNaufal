@@ -1,7 +1,7 @@
 require("dotenv").config();
 require("module-alias/register");
 const express = require("express");
-const app = express();
+let app = express();
 const bodyParser = require("body-parser");
 const port = process.env.PORT || 3000;
 const baseUrl = process.env.BASE_URL;
@@ -9,12 +9,20 @@ const swaggerjsdoc = require("swagger-jsdoc");
 const swaggerui = require("swagger-ui-express");
 const cors = require("cors");
 const productRouter = require("@/routes/product");
+const expressListEndpoints = require("express-list-endpoints");
 
 app.use(cors());
 app.use(bodyParser.json());
 
 app.listen(port, () => {
-  console.log(`Server Running on port ${port}`);
+  console.log(`Server running on port ${port}`);
+
+  // List endpoints
+  const endpoints = expressListEndpoints(app);
+  console.log("Available Endpoints:");
+  endpoints.forEach((endpoint) => {
+    console.log(`${endpoint.methods.join(", ")} ${endpoint.path}`);
+  });
 });
 
 app.get("/", (req, res) => {
